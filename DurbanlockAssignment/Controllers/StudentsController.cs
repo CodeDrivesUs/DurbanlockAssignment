@@ -25,6 +25,10 @@ namespace StudentAdmission.Controllers
         [ActionName("Index")]
         public async Task<ActionResult> IndexAsync()
         {
+            if (!Request.IsAuthenticated)
+            {
+                RedirectToAction("/");
+            }
             var items = await DocumentDBRepository<Item>.GetItemesAsync();
             return View(items);
         }
@@ -32,7 +36,7 @@ namespace StudentAdmission.Controllers
         [ActionName("search")]
         public async Task<ActionResult> SearchAsync(string search , string SearchBy)
         {
-            var items = await DocumentDBRepository<Item>.SearchAsync(search, SearchBy);
+            var items = await DocumentDBRepository<Item>.SearchAsync(search);
             return View("Index",items);
         }
         [ActionName("UnActive")]
@@ -85,7 +89,7 @@ namespace StudentAdmission.Controllers
         }
        public async Task  Checkuser(string stud)
         {
-            var items = await DocumentDBRepository<Item>.SearchAsync(stud, "StudentNo");
+            var items = await DocumentDBRepository<Item>.Search2Async(stud);
              var item =  items.ToList();
             if (item == null)
             {

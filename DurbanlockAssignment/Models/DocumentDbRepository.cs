@@ -70,62 +70,40 @@ namespace DurbanlockAssignment.Models
 
             return results;
         }
-        public static async Task<IEnumerable<Item>> SearchAsync(string search, string SearchBy)
+        public static async Task<IEnumerable<Item>> SearchAsync(string search)
         {
             var option = new FeedOptions { EnableCrossPartitionQuery = true };
             List<Item> results = new List<Item>();
-            if (SearchBy=="First")
-            {
+
                 IDocumentQuery<Item> query = client.CreateDocumentQuery<Item>(
                UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId),
                option)
-               .Where(x => x.FirstName == search)
+               .Where(x => x.FirstName == search ||x.LastName==search|| x.StudentNum==search|| x.EmailAddress==search||x.PhoneNumber==search)
                .AsDocumentQuery();
 
                 while (query.HasMoreResults)
                 {
                     results.AddRange(await query.ExecuteNextAsync<Item>());
                 }
-            }
-            if (SearchBy == "Last")
-            {
-                IDocumentQuery<Item> query = client.CreateDocumentQuery<Item>(
-               UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId),
-               option)
-               .Where(x => x.LastName == search)
-               .AsDocumentQuery();
 
-                while (query.HasMoreResults)
-                {
-                    results.AddRange(await query.ExecuteNextAsync<Item>());
-                }
-            }
-            if (SearchBy == "Email")
-            {
-                IDocumentQuery<Item> query = client.CreateDocumentQuery<Item>(
-               UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId),
-               option)
-               .Where(x => x.EmailAddress == search)
-               .AsDocumentQuery();
+            return results;
+        }
+        public static async Task<IEnumerable<Item>> Search2Async(string search)
+        {
+            var option = new FeedOptions { EnableCrossPartitionQuery = true };
+            List<Item> results = new List<Item>();
 
-                while (query.HasMoreResults)
-                {
-                    results.AddRange(await query.ExecuteNextAsync<Item>());
-                }
-            }
-            if (SearchBy == "StudentNo")
-            {
-                IDocumentQuery<Item> query = client.CreateDocumentQuery<Item>(
-               UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId),
-               option)
-               .Where(x => x.StudentNum == search)
-               .AsDocumentQuery();
+            IDocumentQuery<Item> query = client.CreateDocumentQuery<Item>(
+           UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId),
+           option)
+           .Where(x =>  x.StudentNum == search)
+           .AsDocumentQuery();
 
-                while (query.HasMoreResults)
-                {
-                    results.AddRange(await query.ExecuteNextAsync<Item>());
-                }
+            while (query.HasMoreResults)
+            {
+                results.AddRange(await query.ExecuteNextAsync<Item>());
             }
+
             return results;
         }
 
