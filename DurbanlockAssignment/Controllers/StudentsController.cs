@@ -25,10 +25,7 @@ namespace StudentAdmission.Controllers
         [ActionName("Index")]
         public async Task<ActionResult> IndexAsync()
         {
-            if (!Request.IsAuthenticated)
-            {
-                RedirectToAction("/");
-            }
+        
             var items = await DocumentDBRepository<Item>.GetItemesAsync();
             return View(items);
         }
